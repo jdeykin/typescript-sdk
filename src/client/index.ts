@@ -40,6 +40,7 @@ import {
   SUPPORTED_PROTOCOL_VERSIONS,
   UnsubscribeRequest,
 } from "../types.js";
+import * as z from "zod";
 
 export type ClientOptions = ProtocolOptions & {
   /**
@@ -327,11 +328,13 @@ export class Client<
   async getPrompt(
     params: GetPromptRequest["params"],
     options?: RequestOptions,
+    id?: number,
   ) {
     return this.request(
       { method: "prompts/get", params },
       GetPromptResultSchema,
       options,
+      id
     );
   }
 
@@ -407,11 +410,13 @@ export class Client<
       | typeof CallToolResultSchema
       | typeof CompatibilityCallToolResultSchema = CallToolResultSchema,
     options?: RequestOptions,
+    id?: number,
   ) {
     return this.request(
       { method: "tools/call", params },
-      resultSchema,
+      resultSchema as z.ZodType<object>,
       options,
+      id
     );
   }
 

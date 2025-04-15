@@ -454,6 +454,7 @@ export abstract class Protocol<
     request: SendRequestT,
     resultSchema: T,
     options?: RequestOptions,
+    requestMessageId?: number,
   ): Promise<z.infer<T>> {
     return new Promise((resolve, reject) => {
       if (!this._transport) {
@@ -467,7 +468,7 @@ export abstract class Protocol<
 
       options?.signal?.throwIfAborted();
 
-      const messageId = this._requestMessageId++;
+      const messageId = requestMessageId ?? this._requestMessageId++;
       const jsonrpcRequest: JSONRPCRequest = {
         ...request,
         jsonrpc: "2.0",
