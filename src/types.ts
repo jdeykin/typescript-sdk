@@ -815,6 +815,18 @@ export const CallToolRequestSchema = RequestSchema.extend({
 });
 
 /**
+ * Used by the passthrough client to invoke a tool provided by the server.
+ */
+export const CallToolRequestSchemaWithId = RequestSchema.extend({
+  id: z.number() || z.string(),
+  method: z.literal("tools/call"),
+  params: BaseRequestParamsSchema.extend({
+    name: z.string(),
+    arguments: z.optional(z.record(z.unknown())),
+  }),
+});
+
+/**
  * An optional notification from the server to the client, informing it that the list of tools it offers has changed. This may be issued by servers without any previous subscription from the client.
  */
 export const ToolListChangedNotificationSchema = NotificationSchema.extend({
